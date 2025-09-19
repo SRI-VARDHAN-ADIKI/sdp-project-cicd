@@ -30,7 +30,7 @@ pipeline {
         stage('Build Backend') {
             steps {
                 dir('backend') {
-                    bat '.\mvnw.cmd -DskipTests clean package'
+                    bat 'mvn clean package'
                 }
             }
         }
@@ -45,33 +45,19 @@ pipeline {
                 if exist "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\fitness-backend" (
                     rmdir /S /Q "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\fitness-backend"
                 )
-                copy backend\\target\\fitness-backend.war "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\fitness-backend.war"
+                copy "backend\\target\\*.war" "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\"
                 '''
             }
         }
 
-        // ===== RESTART TOMCAT =====
-        stage('Restart Tomcat') {
-            steps {
-                script {
-                    // If installed as Windows Service
-                    bat 'net stop Tomcat10 || exit 0'
-                    bat 'net start Tomcat10 || exit 0'
-
-                    // If ZIP install with bin scripts (only if they exist)
-                    bat 'if exist "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\bin\\shutdown.bat" ("C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\bin\\shutdown.bat")'
-                    bat 'if exist "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\bin\\startup.bat" ("C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\bin\\startup.bat")'
-                }
-            }
-        }
     }
 
     post {
         success {
-            echo ' Deployment Successful!'
+            echo 'Deployment Successful!'
         }
         failure {
-            echo ' Pipeline Failed.'
+            echo 'Pipeline Failed.'
         }
     }
 }
