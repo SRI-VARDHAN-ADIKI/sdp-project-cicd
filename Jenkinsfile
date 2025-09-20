@@ -54,21 +54,20 @@ pipeline {
         stage('Restart Tomcat') {
             steps {
                 bat '''
-                echo "Stopping Tomcat..."
-                net stop Tomcat10
-                timeout /t 5 /nobreak
-                echo "Starting Tomcat..."
-                net start Tomcat10
-                timeout /t 10 /nobreak
-                echo "Tomcat restarted successfully!"
+                echo "Restarting Tomcat service..."
+                sc stop Tomcat10
+                sc start Tomcat10
+                echo "Tomcat restart initiated!"
                 '''
             }
         }
 
-        // ===== TEST BACKEND =====
-        stage('Test Backend') {
+        // ===== WAIT AND TEST =====
+        stage('Wait and Test Backend') {
             steps {
                 bat '''
+                echo "Waiting for Tomcat to start..."
+                ping 127.0.0.1 -n 15 > nul
                 echo "Testing backend endpoints..."
                 curl -s http://localhost:8082/fitness-backend/health
                 echo.
