@@ -50,6 +50,35 @@ pipeline {
             }
         }
 
+        // ===== RESTART TOMCAT =====
+        stage('Restart Tomcat') {
+            steps {
+                bat '''
+                echo "Stopping Tomcat..."
+                net stop Tomcat10
+                timeout /t 5 /nobreak
+                echo "Starting Tomcat..."
+                net start Tomcat10
+                timeout /t 10 /nobreak
+                echo "Tomcat restarted successfully!"
+                '''
+            }
+        }
+
+        // ===== TEST BACKEND =====
+        stage('Test Backend') {
+            steps {
+                bat '''
+                echo "Testing backend endpoints..."
+                curl -s http://localhost:8082/fitness-backend/health
+                echo.
+                curl -s http://localhost:8082/fitness-backend/
+                echo.
+                echo "Backend test completed!"
+                '''
+            }
+        }
+
     }
 
     post {
