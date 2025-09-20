@@ -36,7 +36,7 @@ public class SecurityConfig {
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/home/**", "/health", "/api/users/login/**","/api/users/register/**").permitAll()
+                        .requestMatchers("/", "/home/**", "/health", "/api/users/login/**","/api/users/register/**").permitAll()
                         .requestMatchers("/api/exercise-details/**").permitAll() // Allow public access to exercise details
                         .requestMatchers("/api/**").hasAnyAuthority("ADMIN", "USER")
                         .anyRequest().authenticated())

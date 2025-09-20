@@ -17,6 +17,11 @@ public class TestController {
         return "Backend is running successfully!";
     }
 
+    @GetMapping("/")
+    public String root() {
+        return "Welcome to Calisthenix Backend API! Available endpoints: /health, /home, /api/users/register, /api/users/login";
+    }
+
 //    @GetMapping("/api/users/login")
 //    public String LoginPage() {
 //        return "Login Page Works!";
