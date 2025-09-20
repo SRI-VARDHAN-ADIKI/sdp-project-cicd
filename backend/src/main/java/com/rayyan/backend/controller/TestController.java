@@ -12,6 +12,11 @@ public class TestController {
         return "Hello, world!";
     }
 
+    @GetMapping("/health")
+    public String healthCheck() {
+        return "Backend is running successfully!";
+    }
+
 //    @GetMapping("/api/users/login")
 //    public String LoginPage() {
 //        return "Login Page Works!";
